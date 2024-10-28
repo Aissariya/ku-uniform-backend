@@ -46,6 +46,31 @@ app.post('/api/signup', async (req, res) => {
     }
 })
 
+app.get('/api/category', async (req, res) => {
+    const cata = [{
+        img: '1HZDkVEU5PxTbfPVfx9IIeb4nll7-aWAC',
+        name: 'เสื้อนักศึกษาหญิง',
+        price: 250.00
+      },{
+        img: "1srF9DPPx1n_UBu080Dehb3L8Fdt_HAhf",
+        name: 'เสื้อเเจคเกต เกษตรศาสตร์',
+        price: 799.00
+      },{
+        img: '',
+        name: '',
+        price: 0
+      },{
+        img: '',
+        name: '',
+        price: 0
+      },{
+        img: '',
+        name: '',
+        price: 0
+      }]
+      res.status(200).json({cata: cata})
+})
+
 const port = process.env.PORT || 4000
 app.listen(port, () => {
     console.log(`https://localhost:${port}`)
