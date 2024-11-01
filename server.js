@@ -48,11 +48,11 @@ app.post('/api/signup', async (req, res) => {
 
 app.get('/api/category', async (req, res) => {
     const cata = [{
-        img: '1HZDkVEU5PxTbfPVfx9IIeb4nll7-aWAC',
+        img: 'https://firebasestorage.googleapis.com/v0/b/backend-ku-uniform-hub.appspot.com/o/2.png?alt=media&token=0ff89471-b9fd-46bc-9dad-64a99475e071',
         name: 'เสื้อนักศึกษาหญิง',
         price: 250.00
       },{
-        img: "1srF9DPPx1n_UBu080Dehb3L8Fdt_HAhf",
+        img: "https://firebasestorage.googleapis.com/v0/b/backend-ku-uniform-hub.appspot.com/o/3.png?alt=media&token=b2d10cbd-5d24-4249-9fa4-c6a4712021c3",
         name: 'เสื้อเเจคเกต เกษตรศาสตร์',
         price: 799.00
       },{
