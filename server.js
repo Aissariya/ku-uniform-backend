@@ -57,9 +57,9 @@ app.get('/api/category', async (req, res) => {
         const cata = snapshot.docs.map(doc => {
             const data = doc.data();
             return {
-                img: data.image || '',           // ดึงข้อมูลรูปภาพ
-                name: data.productname || '',    // ดึงชื่อสินค้า
-                price: data.price || 0           // ดึงราคาสินค้า
+                img: data.image || '',
+                name: data.productname || '',
+                price: data.price || 0
             };
         });
 
@@ -70,12 +70,19 @@ app.get('/api/category', async (req, res) => {
     }
 });
 
+app.post('/api/cart', async (req, res) => {
+    try {
+        const { userId, product } = req.body; // รับ userId จาก body
+        await db.collection('carts').doc(userId).collection('items').add(product); // ใช้ userId ในการเพิ่มสินค้าลงในคอลเลกชันย่อย
+        res.status(201).json({ message: 'Product added to cart successfully.' });
+    } catch (error) {
+        console.error("Error adding product to cart:", error);
+        res.status(500).json({ message: 'Error adding product to cart.' });
+    }
+});
+
+
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
     console.log(`Server is running on https://localhost:${port}`);
 });
-
-
-
-
-
