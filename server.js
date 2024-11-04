@@ -547,6 +547,15 @@ app.post('/api/payment', async (req, res) => {
             return res.status(400).json({ message: 'Incomplete payment information.' });
         }
 
+        // ตรวจสอบว่าตะกร้าของผู้ใช้มีสินค้าหรือไม่
+        const cartRef = db.collection('users').doc(userId).collection('cart');
+        const cartSnapshot = await cartRef.get();
+
+        if (cartSnapshot.empty) {
+            return res.status(400).json({ message: 'No items in the cart to proceed with payment.' });
+        }
+
+        // ตรวจสอบข้อมูลบัตรชำระเงิน
         const paymentRef = db.collection('payments');
         const paymentSnapshot = await paymentRef.get();
 
@@ -575,8 +584,6 @@ app.post('/api/payment', async (req, res) => {
         });
 
         // ลบสินค้าในตะกร้าหลังจากชำระเงินเสร็จสิ้น
-        const cartRef = db.collection('users').doc(userId).collection('cart');
-        const cartSnapshot = await cartRef.get();
         const deletePromises = cartSnapshot.docs.map(doc => doc.ref.delete());
         await Promise.all(deletePromises);
 
@@ -586,6 +593,30 @@ app.post('/api/payment', async (req, res) => {
         res.status(500).json({ message: 'Payment processing error.' });
     }
 });
+
+// เพิ่มฟังก์ชันตรวจสอบสินค้าภายในตะกร้า
+app.post('/api/check-cart', async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required.' });
+        }
+
+        const cartRef = db.collection('users').doc(userId).collection('cart');
+        const cartSnapshot = await cartRef.get();
+
+        if (cartSnapshot.empty) {
+            return res.status(200).json({ isEmpty: true });
+        }
+
+        res.status(200).json({ isEmpty: false });
+    } catch (error) {
+        console.error("Error checking cart:", error);
+        res.status(500).json({ message: 'Error checking cart.' });
+    }
+});
+
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
